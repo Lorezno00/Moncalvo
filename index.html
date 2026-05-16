@@ -54,12 +54,12 @@
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo9.jpg" alt="Pagina 9"></section>
 
                 <section>
-                    <div class="video-container">
-                        <video data-autoplay loop muted playsinline>
-                            <source src="Slide/Schema_composizione.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </section>
+    <div class="video-container">
+        <video data-autoplay loop muted playsinline autoplay muted>
+            <source src="Slide/Schema_composizione.mp4" type="video/mp4">
+        </video>
+    </div>
+</section>
 
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo11.jpg" alt="Pagina 11"></section>
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo10.jpg" alt="Pagina 10"></section>
@@ -76,29 +76,30 @@
         <script src="dist/reveal.js"></script>
         <script>
             Reveal.initialize({
-                hash: true,
-                margin: 0,
-                minScale: 0.1,
-                maxScale: 1.0,
-                disableLayout: true, 
-                plugins: [ ],
-                
-                progress: false, 
-                controls: false, 
-                
-                // CORRETTO: Stacco totalmente netto, zero sfarfallii sui colori
-                transition: 'none', 
-                backgroundTransition: 'none',
-                navigationMode: 'linear',
+    hash: true,
+    margin: 0,
+    minScale: 0.1,
+    maxScale: 1.0,
+    disableLayout: true, 
+    plugins: [ ],
+    
+    progress: false, 
+    controls: false, 
+    transition: 'none', 
+    backgroundTransition: 'none',
+    navigationMode: 'linear',
 
-                keyboard: {
-                    39: 'next', 
-                    32: 'next', 
-                    40: 'next', 
-                    37: 'prev', 
-                    38: 'prev'  
-                }
-            });
+    // FORZA L'AUTOPLAY DEI MEDIA SU MOBILE ANCHE SENZA INTERAZIONE
+    autoPlayMedia: true, 
+
+    keyboard: {
+        39: 'next', 
+        32: 'next', 
+        40: 'next', 
+        37: 'prev', 
+        38: 'prev'  
+    }
+});
         </script>
     </body>
 </html>
