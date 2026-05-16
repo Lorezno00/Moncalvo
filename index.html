@@ -36,9 +36,24 @@
                 margin-bottom: 5vh !important; 
                 margin-right: 1vw;
             }
+
+            /* Zone di tap invisibili per navigazione facilitata su mobile */
+            .touch-nav {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 15%; /* Copre il 15% del lato dello schermo */
+                z-index: 9999;
+                background: transparent;
+            }
+            .touch-nav-left { left: 0; }
+            .touch-nav-right { right: 0; }
         </style>
     </head>
     <body>
+        <div class="touch-nav touch-nav-left" onclick="Reveal.prev()"></div>
+        <div class="touch-nav touch-nav-right" onclick="Reveal.next()"></div>
+
         <div class="reveal">
             <div class="slides">
 
@@ -59,7 +74,6 @@
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo11.jpg" alt="Pagina 11"></section>
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo10.jpg" alt="Pagina 10"></section>
 
-
                 <section><img src="Slide/SLIDE_moncalvo13.jpg" alt="Pagina 14"></section>
                 <section><img src="Slide/SLIDE_moncalvo14.jpg" alt="Pagina 15"></section>
                 <section><img src="Slide/SLIDE_moncalvo16.jpg" alt="Pagina 16"></section>
@@ -71,38 +85,34 @@
         <script src="dist/reveal.js"></script>
         <script>
             Reveal.initialize({
-    hash: true,
-    margin: 0,
-    minScale: 0.1,
-    maxScale: 1.0,
-    disableLayout: true, 
-    plugins: [ ],
-    
-    progress: false, 
-    controls: false, 
-    transition: 'none', 
-    backgroundTransition: 'none',
-    navigationMode: 'linear',
+                hash: true,
+                margin: 0,
+                minScale: 0.1,
+                maxScale: 1.0,
+                disableLayout: true, 
+                plugins: [ ],
+                
+                progress: false, 
+                controls: false, 
+                transition: 'none',             /* Transizioni orizzontali nette attive */
+                backgroundTransition: 'none',
+                navigationMode: 'linear',
 
-    // ==========================================================================
-    // DISATTIVA IL BLOCCO E IL TASTO "UNMUTE" SU MOBILE
-    // ==========================================================================
-    autoPlayMedia: true,               // Forza l'avvio automatico di tutti i media
-    preloadIframes: true,              // Precarica i contenuti per evitare schermate bianche
-    
-    // Questa configurazione dice a Reveal di non mostrare MAI l'overlay di sblocco audio
-    flags: {
-        videoAutoplayMuted: true
-    },
+                autoPlayMedia: true,               
+                preloadIframes: true,              
+                
+                flags: {
+                    videoAutoplayMuted: true
+                },
 
-    keyboard: {
-        39: 'next', 
-        32: 'next', 
-        40: 'next', 
-        37: 'prev', 
-        38: 'prev'  
-    }
-});
+                keyboard: {
+                    39: 'next', 
+                    32: 'next', 
+                    40: 'next', 
+                    37: 'prev', 
+                    38: 'prev'  
+                }
+            });
         </script>
     </body>
 </html>
