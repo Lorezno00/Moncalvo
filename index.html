@@ -84,8 +84,16 @@
     backgroundTransition: 'none',
     navigationMode: 'linear',
 
-    // FORZA L'AUTOPLAY DEI MEDIA SU MOBILE ANCHE SENZA INTERAZIONE
-    autoPlayMedia: true, 
+    // ==========================================================================
+    // DISATTIVA IL BLOCCO E IL TASTO "UNMUTE" SU MOBILE
+    // ==========================================================================
+    autoPlayMedia: true,               // Forza l'avvio automatico di tutti i media
+    preloadIframes: true,              // Precarica i contenuti per evitare schermate bianche
+    
+    // Questa configurazione dice a Reveal di non mostrare MAI l'overlay di sblocco audio
+    flags: {
+        videoAutoplayMuted: true
+    },
 
     keyboard: {
         39: 'next', 
