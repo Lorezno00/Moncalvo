@@ -18,7 +18,6 @@
 
             .reveal .slides section { padding: 0; }
             
-            /* Adattamento perfetto per schermi desktop e mobile */
             .reveal .slides img, .reveal .slides video {
                 width: auto;
                 height: 100vh;
@@ -29,7 +28,6 @@
             
             .video-container { width: 100%; height: 100vh; background: white; }
 
-            /* Bilanciamento video */
             .reveal .slides video {
                 height: 95vh !important;
                 max-height: 95vh !important;
@@ -37,22 +35,69 @@
                 margin-right: 1vw;
             }
 
-            /* Zone di tap invisibili per navigazione facilitata su mobile */
+            /* Video slide a schermo pieno */
+            .video-fullscreen {
+                width: 100vw !important;
+                height: 100vh !important;
+                max-width: 100vw !important;
+                max-height: 100vh !important;
+                object-fit: contain;
+                margin: 0 !important;
+                display: block;
+            }
+
+            /* Zone di tap */
             .touch-nav {
                 position: fixed;
                 top: 0;
                 bottom: 0;
-                width: 15%; /* Copre il 15% del lato dello schermo */
+                width: 15%;
                 z-index: 9999;
                 background: transparent;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             .touch-nav-left { left: 0; }
             .touch-nav-right { right: 0; }
+
+            /* Frecce */
+            .touch-nav .arrow {
+                width: 28px;
+                height: 28px;
+                opacity: 0.25;
+                transition: opacity 0.2s ease;
+                pointer-events: none; /* il click va alla zona, non alla freccia */
+            }
+            .touch-nav:hover .arrow,
+            .touch-nav:active .arrow {
+                opacity: 0.6;
+            }
+
+            /* Su mobile le frecce sono sempre un po' visibili */
+            @media (hover: none) {
+                .touch-nav .arrow {
+                    opacity: 0.2;
+                }
+            }
         </style>
     </head>
     <body>
-        <div class="touch-nav touch-nav-left" onclick="Reveal.prev()"></div>
-        <div class="touch-nav touch-nav-right" onclick="Reveal.next()"></div>
+
+        <!-- Freccia sinistra -->
+        <div class="touch-nav touch-nav-left" onclick="Reveal.prev()">
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <!-- Freccia destra -->
+        <div class="touch-nav touch-nav-right" onclick="Reveal.next()">
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
 
         <div class="reveal">
             <div class="slides">
@@ -68,7 +113,22 @@
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo8.jpg" alt="Pagina 8"></section>
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo9.jpg" alt="Pagina 9"></section>
 
-                <section data-background-video="Slide/Schema.mp4" data-background-video-loop data-background-video-muted>
+                <!--
+                    SLIDE VIDEO: invece di data-background-video, usiamo un <video> HTML normale.
+                    Questo è il modo più affidabile per l'autoplay su mobile (iOS incluso).
+                    Gli attributi chiave sono: autoplay, muted, loop, playsinline
+                    "playsinline" è FONDAMENTALE per iOS: senza, Safari non fa partire il video.
+                -->
+                <section data-background-color="#000000">
+                    <video 
+                        class="video-fullscreen"
+                        src="Slide/Schema.mp4"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto">
+                    </video>
                 </section>
 
                 <section data-background-color="#BC5952"><img src="Slide/SLIDE_moncalvo11.jpg" alt="Pagina 11"></section>
@@ -94,17 +154,13 @@
                 
                 progress: false, 
                 controls: false, 
-                transition: 'none',             /* Transizioni orizzontali nette attive */
+                transition: 'none',
                 backgroundTransition: 'none',
                 navigationMode: 'linear',
 
                 autoPlayMedia: true,               
                 preloadIframes: true,              
                 
-                flags: {
-                    videoAutoplayMuted: true
-                },
-
                 keyboard: {
                     39: 'next', 
                     32: 'next', 
@@ -112,6 +168,35 @@
                     37: 'prev', 
                     38: 'prev'  
                 }
+            });
+
+            /*
+             * FIX AUTOPLAY MOBILE:
+             * Quando Reveal.js porta in primo piano la slide del video,
+             * forziamo manualmente il play() via JavaScript.
+             * Questo è necessario perché alcuni browser mobile ignorano
+             * l'attributo "autoplay" e richiedono che il play() venga
+             * chiamato in risposta a un evento utente (come lo swipe/tap
+             * per cambiare slide).
+             */
+            Reveal.on('slidechanged', function(event) {
+                // Cerca un video nella slide appena diventata attiva
+                const video = event.currentSlide.querySelector('video');
+                if (video) {
+                    video.currentTime = 0; // riparti dall'inizio ogni volta
+                    video.play().catch(function(err) {
+                        // Il catch evita errori in console se il browser blocca ancora il play
+                        console.log('Autoplay bloccato dal browser:', err);
+                    });
+                }
+
+                // Mette in pausa eventuali video nelle slide non attive (ottimizzazione)
+                const allVideos = document.querySelectorAll('.slides video');
+                allVideos.forEach(function(v) {
+                    if (v !== video) {
+                        v.pause();
+                    }
+                });
             });
         </script>
     </body>
